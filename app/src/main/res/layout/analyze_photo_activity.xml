@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.analize_photo.AnalizePhotoActivity">
+    tools:context=".view.analyze_photo.AnalyzePhotoActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.select_photo.PhotoSelectorActivity"/>
-        <activity android:name=".view.analize_photo.AnalizePhotoActivity" />
+        <activity android:name=".view.analyze_photo.AnalyzePhotoActivity" />
     </application>
 
 </manifest>

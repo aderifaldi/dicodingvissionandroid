@@ -1,4 +1,4 @@
-package com.example.dicodingvission.view.analize_photo;
+package com.example.dicodingvission.view.analyze_photo;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,14 +13,14 @@ import com.example.dicodingvission.retrofit.ApiRequest;
 import com.example.dicodingvission.retrofit.ApiResponse;
 import com.example.dicodingvission.retrofit.ConnectionCallback;
 import com.example.dicodingvission.retrofit.ConnectionManager;
-import com.example.dicodingvission.view.analize_photo.model.Actress;
-import com.example.dicodingvission.view.analize_photo.model.Analize;
-import com.example.dicodingvission.view.analize_photo.model.AutoCaption;
+import com.example.dicodingvission.view.analyze_photo.model.Actress;
+import com.example.dicodingvission.view.analyze_photo.model.Analyze;
+import com.example.dicodingvission.view.analyze_photo.model.AutoCaption;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
 
-public class AnalizePhotoActivity extends AppCompatActivity {
+public class AnalyzePhotoActivity extends AppCompatActivity {
 
     private ImageView image;
     private TextView textInfo;
@@ -37,7 +37,7 @@ public class AnalizePhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.analize_photo_activity);
+        setContentView(R.layout.analyze_photo_activity);
 
         initRetrofitRequest();
         initView();
@@ -85,13 +85,13 @@ public class AnalizePhotoActivity extends AppCompatActivity {
 
         String features = "ImageType, Color, Faces, Adult, Categories";
 
-        Call<Analize> call = apiRequest.call().Analize(features, "en", jsonObject);
+        Call<Analyze> call = apiRequest.call().Analize(features, "en", jsonObject);
         connectionManager.callApi(call, new ConnectionCallback() {
             @Override
             public void onFinishRequest(ApiResponse r) {
                 swipeRefreshLayout.setRefreshing(false);
 
-                Analize response = (Analize) r.getData();
+                Analyze response = (Analyze) r.getData();
 
                 if (response != null) {
 
@@ -105,14 +105,14 @@ public class AnalizePhotoActivity extends AppCompatActivity {
                     textInfo.append("Is Racy Content:" + response.getAdult().isIsRacyContent() + "\n");
                     textInfo.append("Racy score:" + response.getAdult().getRacyScore() + "\n\n") ;
 
-                    for (Analize.Categories category: response.getCategories()) {
+                    for (Analyze.Categories category: response.getCategories()) {
                         textInfo.append("Category: " + category.getName() + ", score: " + category.getScore() + "\n");
                     }
 
                     textInfo.append("\n");
 
                     int faceCount = 0;
-                    for (Analize.Faces face: response.getFaces()) {
+                    for (Analyze.Faces face: response.getFaces()) {
 
                         faceCount++;
                         textInfo.append("face " + faceCount + ", gender:" + face.getGender()

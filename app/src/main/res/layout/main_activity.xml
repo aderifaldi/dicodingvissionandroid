@@ -16,7 +16,7 @@
             android:id="@+id/btnAnalizeImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ANALIZE"/>
+            android:text="ANALYZE"/>
 
         <Button
             android:id="@+id/btnAutoCaption"

@@ -1,10 +1,10 @@
-package com.example.dicodingvission.view.analize_photo.model;
+package com.example.dicodingvission.view.analyze_photo.model;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Analize {
+public class Analyze {
 
     /**
      * categories : [{"name":"people_","score":0.98828125}]

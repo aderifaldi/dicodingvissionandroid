@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.example.dicodingvission.R;
-import com.example.dicodingvission.view.analize_photo.AnalizePhotoActivity;
+import com.example.dicodingvission.view.analyze_photo.AnalyzePhotoActivity;
 import com.example.dicodingvission.view.select_photo.model.Photo;
 
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class PhotoSelectorActivity extends AppCompatActivity {
                 bundle.putInt("vission", vission);
                 bundle.putString("imageUrl", adapter.getData().get(i).getUrl());
 
-                Intent intent = new Intent(getApplicationContext(), AnalizePhotoActivity.class);
+                Intent intent = new Intent(getApplicationContext(), AnalyzePhotoActivity.class);
                 intent.putExtras(bundle);
 
                 startActivity(intent);
