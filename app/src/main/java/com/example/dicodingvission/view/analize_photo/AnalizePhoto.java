@@ -1,4 +1,4 @@
-package com.example.dicodingvission.view.analize;
+package com.example.dicodingvission.view.analize_photo;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package com.example.dicodingvission.view.photo_selector;
+package com.example.dicodingvission.view.select_photo;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.example.dicodingvission.R;
-import com.example.dicodingvission.view.analize.AnalizePhotoActivity;
+import com.example.dicodingvission.view.analize_photo.AnalizePhotoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +20,40 @@ public class PhotoSelectorActivity extends AppCompatActivity {
     private GridLayoutManager gridLayoutManager;
     private PhotoSelectorAdapter adapter;
     private List<Photo> images;
+    private Bundle bundle;
+    private int vission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photo_selector_activity);
 
+        initData();
         initView();
         initList();
-        initData();
         storeDataToList();
+
+    }
+
+    private void initData() {
+
+        bundle = getIntent().getExtras();
+        vission = bundle.getInt("vission");
+
+        images = new ArrayList<>();
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision1.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision2.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision3.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision4.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision5.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision6.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision7.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision8.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision9.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision10.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision11.jpg"));
+        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision12.jpg"));
+
 
     }
 
@@ -49,30 +73,17 @@ public class PhotoSelectorActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("vission", vission);
+                bundle.putString("imageUrl", adapter.getData().get(i).getUrl());
+
                 Intent intent = new Intent(getApplicationContext(), AnalizePhotoActivity.class);
-                intent.putExtra("imageUrl", adapter.getData().get(i).getUrl());
+                intent.putExtras(bundle);
+
                 startActivity(intent);
             }
         });
-    }
-
-    private void initData() {
-
-        images = new ArrayList<>();
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision1.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision2.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision3.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision4.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision5.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision6.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision7.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision8.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision9.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision10.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision11.jpg"));
-        images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision12.jpg"));
-
-
     }
 
     private void storeDataToList() {

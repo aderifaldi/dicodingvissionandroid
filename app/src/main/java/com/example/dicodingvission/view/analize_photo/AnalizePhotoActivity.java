@@ -1,13 +1,13 @@
-package com.example.dicodingvission.view.analize;
+package com.example.dicodingvission.view.analize_photo;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.dicodingvission.Constant;
 import com.example.dicodingvission.R;
 import com.example.dicodingvission.retrofit.ApiRequest;
 import com.example.dicodingvission.retrofit.ApiResponse;
@@ -24,10 +24,12 @@ public class AnalizePhotoActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private String imageUrl;
-    private Intent intent;
+    private int vission;
 
     private ApiRequest apiRequest;
     private ConnectionManager connectionManager;
+
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +47,7 @@ public class AnalizePhotoActivity extends AppCompatActivity {
         image = findViewById(R.id.image);
         textInfo = findViewById(R.id.textInfo);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                analizeImage();
-            }
-        });
+        swipeRefreshLayout.setEnabled(false);
     }
 
     private void initRetrofitRequest() {
@@ -59,29 +56,58 @@ public class AnalizePhotoActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        intent = getIntent();
-        if (intent != null){
-            imageUrl = intent.getStringExtra("imageUrl");
+        bundle = getIntent().getExtras();
+        if (bundle != null) {
+            imageUrl = bundle.getString("imageUrl");
+            vission = bundle.getInt("vission");
+
             Glide.with(this).load(imageUrl).into(image);
 
-            analizeImage();
+            if (vission == Constant.Data.ANALIZE){
+
+            } else if (vission == Constant.Data.AUTO_CAPTION) {
+                autoCaption();
+            } else { //ACTRESS
+
+            }
 
         }
     }
 
-    private void analizeImage() {
+    private void autoCaption() {
         swipeRefreshLayout.setRefreshing(true);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Url", imageUrl);
 
-        Call<AnalizePhoto> call = apiRequest.call().AnalizeImage("Categories,Description,Color", "en", jsonObject);
+        Call<AnalizePhoto> call = apiRequest.call().AnalizeImage("Description", "en", jsonObject);
         connectionManager.callApi(call, new ConnectionCallback() {
             @Override
             public void onFinishRequest(ApiResponse r) {
                 swipeRefreshLayout.setRefreshing(false);
                 AnalizePhoto response = (AnalizePhoto) r.getData();
-                if (response != null){
-                    textInfo.setText(response.getDescription().getCaptions().get(0).getText());
+                if (response != null) {
+                    textInfo.append("Image format: " + response.getMetadata().getFormat() + "\n");
+                    textInfo.append("Image width: " + ("" + response.getMetadata().getWidth()) +
+                            ", height: " + ("" + response.getMetadata().getHeight()));
+
+                    textInfo.append("\n");
+                    textInfo.append("\n");
+
+                    for (AnalizePhoto.Description.Captions caption : response.getDescription().getCaptions()){
+                        textInfo.append("Caption: " + caption.getText() +
+                                ", confidence: " + caption.getConfidence());
+                    }
+
+                    textInfo.append("\n");
+                    textInfo.append("\n");
+
+                    textInfo.append("Tags:");
+                    textInfo.append("\n");
+
+                    for (String tag : response.getDescription().getTags()){
+                        textInfo.append(tag + "\n");
+                    }
+
                 }
             }
         });
