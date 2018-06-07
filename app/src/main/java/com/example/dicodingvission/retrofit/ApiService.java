@@ -1,6 +1,7 @@
 package com.example.dicodingvission.retrofit;
 
-import com.example.dicodingvission.view.analize_photo.AnalizePhoto;
+import com.example.dicodingvission.view.analize_photo.model.Analize;
+import com.example.dicodingvission.view.analize_photo.model.AutoCaption;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -14,11 +15,18 @@ import retrofit2.http.Query;
  */
 public interface ApiService {
 
-    //ANALIZE IMAGE
+    //ANALIZE
     @POST("analyze")
     @Headers("Content-Type: application/json")
-    Call<AnalizePhoto> AnalizeImage(@Query("visualFeatures") String visualFeatures,
-                                    @Query("language") String language,
-                                    @Body JsonObject jsonPost);
+    Call<Analize> Analize(@Query("visualFeatures") String visualFeatures,
+                          @Query("language") String language,
+                          @Body JsonObject jsonPost);
+
+    //AUTO CAPTION
+    @POST("analyze")
+    @Headers("Content-Type: application/json")
+    Call<AutoCaption> AutoCaption(@Query("visualFeatures") String visualFeatures,
+                                  @Query("language") String language,
+                                  @Body JsonObject jsonPost);
 
 }

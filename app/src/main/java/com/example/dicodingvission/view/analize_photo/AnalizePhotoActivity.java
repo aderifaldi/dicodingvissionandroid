@@ -13,6 +13,8 @@ import com.example.dicodingvission.retrofit.ApiRequest;
 import com.example.dicodingvission.retrofit.ApiResponse;
 import com.example.dicodingvission.retrofit.ConnectionCallback;
 import com.example.dicodingvission.retrofit.ConnectionManager;
+import com.example.dicodingvission.view.analize_photo.model.Analize;
+import com.example.dicodingvission.view.analize_photo.model.AutoCaption;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -64,7 +66,7 @@ public class AnalizePhotoActivity extends AppCompatActivity {
             Glide.with(this).load(imageUrl).into(image);
 
             if (vission == Constant.Data.ANALIZE){
-
+                analize();
             } else if (vission == Constant.Data.AUTO_CAPTION) {
                 autoCaption();
             } else { //ACTRESS
@@ -74,26 +76,88 @@ public class AnalizePhotoActivity extends AppCompatActivity {
         }
     }
 
-    private void autoCaption() {
+    private void analize() {
         swipeRefreshLayout.setRefreshing(true);
+
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Url", imageUrl);
 
-        Call<AnalizePhoto> call = apiRequest.call().AnalizeImage("Description", "en", jsonObject);
+        String features = "ImageType, Color, Faces, Adult, Categories";
+
+        Call<Analize> call = apiRequest.call().Analize(features, "en", jsonObject);
         connectionManager.callApi(call, new ConnectionCallback() {
             @Override
             public void onFinishRequest(ApiResponse r) {
                 swipeRefreshLayout.setRefreshing(false);
-                AnalizePhoto response = (AnalizePhoto) r.getData();
+
+                Analize response = (Analize) r.getData();
+
+                if (response != null) {
+
+                    textInfo.append("Image format: " + response.getMetadata().getFormat() + "\n");
+                    textInfo.append("Image width: " + response.getMetadata().getWidth() + ", height:" + response.getMetadata().getHeight() + "\n");
+                    textInfo.append("Clip Art Type: " + response.getImageType().getClipArtType() + "\n");
+                    textInfo.append("Line Drawing Type: " + response.getImageType().getLineDrawingType() + "\n");
+                    textInfo.append("Is Adult Content:" + response.getAdult().isIsAdultContent() + "\n");
+                    textInfo.append("Adult score:" + response.getAdult().getAdultScore() + "\n");
+                    textInfo.append("Is Racy Content:" + response.getAdult().isIsRacyContent() + "\n");
+                    textInfo.append("Racy score:" + response.getAdult().getRacyScore() + "\n\n") ;
+
+                    for (Analize.Categories category: response.getCategories()) {
+                        textInfo.append("Category: " + category.getName() + ", score: " + category.getScore() + "\n");
+                    }
+
+                    textInfo.append("\n");
+
+                    int faceCount = 0;
+                    for (Analize.Faces face: response.getFaces()) {
+
+                        faceCount++;
+                        textInfo.append("face " + faceCount + ", gender:" + face.getGender() + ", age: " + + face.getAge() + "\n");
+                        textInfo.append("    left: " + face.getFaceRectangle().getLeft() +  ",  top: " + face.getFaceRectangle().getTop() + ", width: " + face.getFaceRectangle().getWidth() + "  height: " + face.getFaceRectangle().getHeight() + "\n" );
+
+                    }
+
+                    if (faceCount == 0) {
+                        textInfo.append("No face is detected");
+                    }
+
+                    textInfo.append("\n");
+
+                    textInfo.append("\nDominant Color Foreground :" + response.getColor().getDominantColorForeground() + "\n");
+                    textInfo.append("Dominant Color Background :" + response.getColor().getDominantColorBackground() + "\n");
+
+                }
+            }
+        });
+
+    }
+
+    private void autoCaption() {
+        swipeRefreshLayout.setRefreshing(true);
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("Url", imageUrl);
+
+        String features = "Description";
+
+        Call<AutoCaption> call = apiRequest.call().AutoCaption(features, "en", jsonObject);
+        connectionManager.callApi(call, new ConnectionCallback() {
+            @Override
+            public void onFinishRequest(ApiResponse r) {
+                swipeRefreshLayout.setRefreshing(false);
+
+                AutoCaption response = (AutoCaption) r.getData();
+
                 if (response != null) {
                     textInfo.append("Image format: " + response.getMetadata().getFormat() + "\n");
-                    textInfo.append("Image width: " + ("" + response.getMetadata().getWidth()) +
-                            ", height: " + ("" + response.getMetadata().getHeight()));
+                    textInfo.append("Image width: " + response.getMetadata().getWidth() +
+                            ", height: " + response.getMetadata().getHeight());
 
                     textInfo.append("\n");
                     textInfo.append("\n");
 
-                    for (AnalizePhoto.Description.Captions caption : response.getDescription().getCaptions()){
+                    for (AutoCaption.Description.Captions caption : response.getDescription().getCaptions()){
                         textInfo.append("Caption: " + caption.getText() +
                                 ", confidence: " + caption.getConfidence());
                     }
