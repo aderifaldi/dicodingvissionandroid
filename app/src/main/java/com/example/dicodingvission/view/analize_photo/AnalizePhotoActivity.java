@@ -13,6 +13,7 @@ import com.example.dicodingvission.retrofit.ApiRequest;
 import com.example.dicodingvission.retrofit.ApiResponse;
 import com.example.dicodingvission.retrofit.ConnectionCallback;
 import com.example.dicodingvission.retrofit.ConnectionManager;
+import com.example.dicodingvission.view.analize_photo.model.Actress;
 import com.example.dicodingvission.view.analize_photo.model.Analize;
 import com.example.dicodingvission.view.analize_photo.model.AutoCaption;
 import com.google.gson.JsonObject;
@@ -70,7 +71,7 @@ public class AnalizePhotoActivity extends AppCompatActivity {
             } else if (vission == Constant.Data.AUTO_CAPTION) {
                 autoCaption();
             } else { //ACTRESS
-
+                actress();
             }
 
         }
@@ -95,7 +96,8 @@ public class AnalizePhotoActivity extends AppCompatActivity {
                 if (response != null) {
 
                     textInfo.append("Image format: " + response.getMetadata().getFormat() + "\n");
-                    textInfo.append("Image width: " + response.getMetadata().getWidth() + ", height:" + response.getMetadata().getHeight() + "\n");
+                    textInfo.append("Image width: " + response.getMetadata().getWidth() + ", height:"
+                            + response.getMetadata().getHeight() + "\n");
                     textInfo.append("Clip Art Type: " + response.getImageType().getClipArtType() + "\n");
                     textInfo.append("Line Drawing Type: " + response.getImageType().getLineDrawingType() + "\n");
                     textInfo.append("Is Adult Content:" + response.getAdult().isIsAdultContent() + "\n");
@@ -113,8 +115,12 @@ public class AnalizePhotoActivity extends AppCompatActivity {
                     for (Analize.Faces face: response.getFaces()) {
 
                         faceCount++;
-                        textInfo.append("face " + faceCount + ", gender:" + face.getGender() + ", age: " + + face.getAge() + "\n");
-                        textInfo.append("    left: " + face.getFaceRectangle().getLeft() +  ",  top: " + face.getFaceRectangle().getTop() + ", width: " + face.getFaceRectangle().getWidth() + "  height: " + face.getFaceRectangle().getHeight() + "\n" );
+                        textInfo.append("face " + faceCount + ", gender:" + face.getGender()
+                                + ", age: " + face.getAge() + "\n");
+                        textInfo.append("    left: " + face.getFaceRectangle().getLeft()
+                                +  ",  top: " + face.getFaceRectangle().getTop()
+                                + ", width: " + face.getFaceRectangle().getWidth()
+                                + "  height: " + face.getFaceRectangle().getHeight() + "\n" );
 
                     }
 
@@ -170,6 +176,47 @@ public class AnalizePhotoActivity extends AppCompatActivity {
 
                     for (String tag : response.getDescription().getTags()){
                         textInfo.append(tag + "\n");
+                    }
+
+                }
+            }
+        });
+
+    }
+
+    private void actress() {
+        swipeRefreshLayout.setRefreshing(true);
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("Url", imageUrl);
+
+        String model = "celebrities";
+
+        Call<Actress> call = apiRequest.call().Actress(model, jsonObject);
+        connectionManager.callApi(call, new ConnectionCallback() {
+            @Override
+            public void onFinishRequest(ApiResponse r) {
+                swipeRefreshLayout.setRefreshing(false);
+
+                Actress response = (Actress) r.getData();
+
+                if (response != null) {
+
+                    textInfo.append("Image format: " + response.getMetadata().getFormat() + "\n");
+                    textInfo.append("Image width: " + response.getMetadata().getWidth() +
+                            ", height:" + response.getMetadata().getHeight() + "\n");
+                    textInfo.append("\n");
+
+                    if (response.getResult().getCelebrities().size() != 0){
+
+                        textInfo.append("Celebrities detected: " + response.getResult().getCelebrities().size() + "\n");
+
+                        for (Actress.Result.Celebrities celeb : response.getResult().getCelebrities()){
+                            textInfo.append("Name: " + celeb.getName() + ", score: " + celeb.getConfidence() + "\n");
+                        }
+
+                    }else {
+                        textInfo.append("Celebrities detected: 0");
                     }
 
                 }

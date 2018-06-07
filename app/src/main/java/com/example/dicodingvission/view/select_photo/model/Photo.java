@@ -1,4 +1,4 @@
-package com.example.dicodingvission.view.select_photo;
+package com.example.dicodingvission.view.select_photo.model;
 
 public class Photo {
 

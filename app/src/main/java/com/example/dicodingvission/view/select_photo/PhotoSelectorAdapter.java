@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.dicodingvission.R;
+import com.example.dicodingvission.view.select_photo.model.Photo;
 
 import java.util.ArrayList;
 

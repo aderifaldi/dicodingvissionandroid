@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 
 import com.example.dicodingvission.R;
 import com.example.dicodingvission.view.analize_photo.AnalizePhotoActivity;
+import com.example.dicodingvission.view.select_photo.model.Photo;
 
 import java.util.ArrayList;
 import java.util.List;
