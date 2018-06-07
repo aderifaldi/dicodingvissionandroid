@@ -22,7 +22,7 @@ public class PhotoSelectorActivity extends AppCompatActivity {
     private PhotoSelectorAdapter adapter;
     private List<Photo> images;
     private Bundle bundle;
-    private int vission;
+    private int vision;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class PhotoSelectorActivity extends AppCompatActivity {
     private void initData() {
 
         bundle = getIntent().getExtras();
-        vission = bundle.getInt("vission");
+        vision = bundle.getInt("vision");
 
         images = new ArrayList<>();
         images.add(new Photo("https://research5571.blob.core.windows.net/dicoding/vision1.jpg"));
@@ -76,7 +76,7 @@ public class PhotoSelectorActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("vission", vission);
+                bundle.putInt("vision", vision);
                 bundle.putString("imageUrl", adapter.getData().get(i).getUrl());
 
                 Intent intent = new Intent(getApplicationContext(), AnalyzePhotoActivity.class);

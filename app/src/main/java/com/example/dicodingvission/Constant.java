@@ -20,7 +20,7 @@ public class Constant {
     }
 
     public class Data {
-        public static final int ANALIZE = 1;
+        public static final int ANALYZE = 1;
         public static final int AUTO_CAPTION = 2;
         public static final int ACTRESS = 3;
     }

@@ -16,7 +16,7 @@ import retrofit2.http.Query;
  */
 public interface ApiService {
 
-    //ANALIZE
+    //ANALYZE
     @POST("analyze")
     @Headers("Content-Type: application/json")
     Call<Analyze> Analize(@Query("visualFeatures") String visualFeatures,

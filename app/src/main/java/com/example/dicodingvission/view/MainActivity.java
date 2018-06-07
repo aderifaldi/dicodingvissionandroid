@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (view.getId()){
             case R.id.btnAnalizeImage:
-                runIntent(Constant.Data.ANALIZE);
+                runIntent(Constant.Data.ANALYZE);
                 break;
             case R.id.btnAutoCaption:
                 runIntent(Constant.Data.AUTO_CAPTION);
@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void runIntent(int vission){
-        bundle.putInt("vission", vission);
+    private void runIntent(int vision){
+        bundle.putInt("vision", vision);
         intent.putExtras(bundle);
         startActivity(intent);
     }

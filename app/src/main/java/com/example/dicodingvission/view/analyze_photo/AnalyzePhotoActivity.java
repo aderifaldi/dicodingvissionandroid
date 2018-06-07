@@ -27,7 +27,7 @@ public class AnalyzePhotoActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private String imageUrl;
-    private int vission;
+    private int vision;
 
     private ApiRequest apiRequest;
     private ConnectionManager connectionManager;
@@ -62,13 +62,13 @@ public class AnalyzePhotoActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         if (bundle != null) {
             imageUrl = bundle.getString("imageUrl");
-            vission = bundle.getInt("vission");
+            vision = bundle.getInt("vision");
 
             Glide.with(this).load(imageUrl).into(image);
 
-            if (vission == Constant.Data.ANALIZE){
-                analize();
-            } else if (vission == Constant.Data.AUTO_CAPTION) {
+            if (vision == Constant.Data.ANALYZE){
+                analyze();
+            } else if (vision == Constant.Data.AUTO_CAPTION) {
                 autoCaption();
             } else { //ACTRESS
                 actress();
@@ -77,7 +77,7 @@ public class AnalyzePhotoActivity extends AppCompatActivity {
         }
     }
 
-    private void analize() {
+    private void analyze() {
         swipeRefreshLayout.setRefreshing(true);
 
         JsonObject jsonObject = new JsonObject();
